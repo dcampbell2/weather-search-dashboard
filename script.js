@@ -29,6 +29,20 @@ $(document).ready(function () {
 
     }
 
+    function getFiveDay(fiveDayForecast){
+
+        var newQueryURL =
+          "https://api.openweathermap.org/data/2.5/forecast?q=Atlanta&appid=1595add4d1ccc2ce38dfcf973ec248ec&units=imperial&cnt=5";
+    
+        $.ajax({
+          url: newQueryURL,
+          method: "GET",
+        }).then(function (response) {
+          console.log(response);
+        });
+        
+    }
+
 
 
   $("#submitBtn").on("click", function (event) {
@@ -45,6 +59,7 @@ $(document).ready(function () {
     $(".list-group").append(newLI)
 
     getCity(userCityInput)
+    getFiveDay()
 
   });
 });

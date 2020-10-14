@@ -1,3 +1,11 @@
+.navbar-brand{
+    position: relative;
+    width: 100%;
+    left: 0;
+    top: 0;
+    text-align: center;
+}
+
 .first-container{
     float: left;
     padding-bottom: 50px;
@@ -12,11 +20,16 @@
     float: left;
 }
 
-#five-day{
-    padding-left: 11px;
-    margin-top: 15px;
+.five-day{
+    /* padding-left: 3px; */
+    margin-top: 20px;
+    padding-top: 10px;
 }
 
 .forecast-rows{
     padding-left: 30px;
+}
+
+.card-body{
+    padding-right: 15px;
 }

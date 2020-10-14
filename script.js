@@ -11,6 +11,7 @@ $(document).ready(function () {
     }).then(function (response) {
       console.log(response);
       displayCityWeather(response);
+      getUvIndex(response);
     });
   }
 
@@ -19,69 +20,77 @@ $(document).ready(function () {
     $("#temparature").text("Temparature: " + arrayOfWeather.main.temp);
     $("#humidity").text("Humidity: " + arrayOfWeather.main.humidity);
     $("#wind-speed").text("Wind-Speed: " + arrayOfWeather.wind.speed);
-    // $("#uv-index").text("UV Index: " + arrayOfWeather.main.temp);
+    // $("#uv-index").text("UV Index: " + uvIndex.main.temp);
   }
 
   function getFiveDay(fiveDayForecast) {
     var newQueryURL =
-      "https://api.openweathermap.org/data/2.5/forecast?q=" + fiveDayForecast + "&appid=1595add4d1ccc2ce38dfcf973ec248ec&units=imperial&cnt=5";
+      "https://api.openweathermap.org/data/2.5/forecast?q=" +
+      fiveDayForecast +
+      "&appid=1595add4d1ccc2ce38dfcf973ec248ec&units=imperial&cnt=5";
 
     $.ajax({
       url: newQueryURL,
       method: "GET",
     }).then(function (response) {
       console.log(response);
-      displayFiveDay(response)
+      displayFiveDay(response);
     });
   }
 
-  function displayFiveDay(forecast){
-      for (var i = 0; i < forecast.list.length; i++){
-          var newDivRow = $("<div>")
-          newDivRow.addClass("row forecast-rows")
-          $("#new-rows").append(newDivRow)
+  function getUvIndex(uvIndex) {
+    var uvQueryURL =
+      "http://api.openweathermap.org/data/2.5/uvi?lat=" + uvIndex.coord.lat + "&lon=" + uvIndex.coord.lon + "&appid=1595add4d1ccc2ce38dfcf973ec248ec";
 
-          console.log(forecast.length)
+      $.ajax({
+          url: uvQueryURL,
+          method: "GET",
+      }).then(function(response){
+          console.log(response)
+          $("#uv-index").text("UV Index: " + response.value)
+      })
+  }
 
-        //   var secondDivRow = $("<div>")
-        //   secondDivRow.addClass("row")
-        //   newDivRow.append(secondDivRow)
+  function displayFiveDay(forecast) {
+    var day = 0;
+    for (var i = 0; i < forecast.list.length; i++) {
+      var newDivRow = $("<div>");
+      newDivRow.addClass("row forecast-rows");
+      $("#new-rows").append(newDivRow);
 
-          var newDiv = $("<div>")
-          newDiv.addClass("card text-white bg-primary mb-3")
-          newDiv.css("max-width", "18rem")
-          newDivRow.append(newDiv)
+      var newDiv = $("<div>");
+      newDiv.addClass("card text-white bg-primary mb-3");
+      newDiv.css("max-width", "18rem");
+      newDiv.attr("id", day++);
+      newDivRow.append(newDiv);
 
-          var cardBodyDiv = $("<div>");
-          cardBodyDiv.addClass("card-body");
-          newDiv.append(cardBodyDiv)
+      var cardBodyDiv = $("<div>");
+      cardBodyDiv.addClass("card-body");
+      newDiv.append(cardBodyDiv);
 
-          var cardTitle = $("<h5>");
-          cardTitle.addClass("card-title")
-          cardTitle.text(moment(parseInt(forecast.list[i].dt)).format("L"));
-          cardBodyDiv.append(cardTitle);
+      var cardTitle = $("<h5>");
+      cardTitle.addClass("card-title");
+      cardTitle.text(moment(parseInt(forecast.list[i].dt * 1000)).format("L"));
+      cardBodyDiv.append(cardTitle);
 
-          var forecastTemp = $("<p>")
-          var forecastHumid = $("<p>")
+      var forecastTemp = $("<p>");
+      var forecastHumid = $("<p>");
 
-          forecastTemp.addClass("card-text")
-          forecastHumid.addClass("card-text")
+      forecastTemp.addClass("card-text");
+      forecastHumid.addClass("card-text");
 
-          forecastTemp.text("Temp: " + forecast.list[i].main.temp)
-          cardBodyDiv.append(forecastTemp)
-          
-          forecastHumid.text("Humidity: " + forecast.list[i].main.humidity + "%")
-          cardBodyDiv.append(forecastHumid)
+      forecastTemp.text("Temp: " + forecast.list[i].main.temp);
+      cardBodyDiv.append(forecastTemp);
 
-
-          
-          
-
-      }
+      forecastHumid.text("Humidity: " + forecast.list[i].main.humidity + "%");
+      cardBodyDiv.append(forecastHumid);
+    }
   }
 
   $("#submitBtn").on("click", function (event) {
     event.preventDefault();
+
+    $(".forecast-rows").empty();
 
     var userCityInput = $("#inputCity").val();
     console.log(userCityInput);
@@ -94,6 +103,6 @@ $(document).ready(function () {
     $(".list-group").append(newLI);
 
     getCity(userCityInput);
-    getFiveDay(userCityInput);
+    getFiveDay(userCityInput)
   });
 });

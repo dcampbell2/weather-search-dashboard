@@ -1,65 +1,83 @@
 $(document).ready(function () {
+  function getCity(userCity) {
+    var queryURL =
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+      userCity +
+      "&appid=1595add4d1ccc2ce38dfcf973ec248ec&units=imperial";
 
+    $.ajax({
+      url: queryURL,
+      method: "GET",
+    }).then(function (response) {
+      console.log(response);
+      displayCityWeather(response);
+    });
+  }
 
+  function displayCityWeather(arrayOfWeather) {
+    $("#cityInfo").text(arrayOfWeather.name);
+    $("#temparature").text("Temparature: " + arrayOfWeather.main.temp);
+    $("#humidity").text("Humidity: " + arrayOfWeather.main.humidity);
+    $("#wind-speed").text("Wind-Speed: " + arrayOfWeather.wind.speed);
+    // $("#uv-index").text("UV Index: " + arrayOfWeather.main.temp);
+  }
 
-    function getCity(userCity){
-    
-        var queryURL =
-          "https://api.openweathermap.org/data/2.5/weather?q=" +
-          userCity +
-          "&appid=1595add4d1ccc2ce38dfcf973ec248ec&units=imperial";
-    
-        $.ajax({
-          url: queryURL,
-          method: "GET",
-        }).then(function (response) {
-          console.log(response);
-          displayCityWeather(response)
-        });
-    }
+  function getFiveDay(fiveDayForecast) {
+    var newQueryURL =
+      "https://api.openweathermap.org/data/2.5/forecast?q=" + fiveDayForecast + "&appid=1595add4d1ccc2ce38dfcf973ec248ec&units=imperial&cnt=5";
 
+    $.ajax({
+      url: newQueryURL,
+      method: "GET",
+    }).then(function (response) {
+      console.log(response);
+      displayFiveDay(response)
+    });
+  }
 
-    function displayCityWeather(arrayOfWeather){
+  function displayFiveDay(forecast){
+      for (var i = 0; i < forecast.list.length; i++){
+          var newDivRow = $("<div>")
+          newDivRow.addClass("row")
+          $("#new-rows").append(newDivRow)
 
-        $("#cityInfo").text(arrayOfWeather.name);
-        $("#temparature").text("Temparature: " + arrayOfWeather.main.temp);
-        $("#humidity").text("Humidity: " + arrayOfWeather.main.humidity);
-        $("#wind-speed").text("Wind-Speed: " + arrayOfWeather.wind.speed);
-        // $("#uv-index").text("UV Index: " + arrayOfWeather.main.temp);
+          console.log(forecast.length)
 
-    }
+        //   var secondDivRow = $("<div>")
+        //   secondDivRow.addClass("row")
+        //   newDivRow.append(secondDivRow)
 
-    function getFiveDay(fiveDayForecast){
+          var newDiv = $("<div>")
+          newDiv.addClass("card text-white bg-primary mb-3")
+          newDiv.css("max-width", "18rem")
+          newDivRow.append(newDiv)
 
-        var newQueryURL =
-          "https://api.openweathermap.org/data/2.5/forecast?q=Atlanta&appid=1595add4d1ccc2ce38dfcf973ec248ec&units=imperial&cnt=5";
-    
-        $.ajax({
-          url: newQueryURL,
-          method: "GET",
-        }).then(function (response) {
-          console.log(response);
-        });
-        
-    }
+          var cardBodyDiv = $("<div>");
+          cardBodyDiv.addClass("card-body");
+          newDiv.append(cardBodyDiv)
 
+          var cardTitle = $("<h5>");
+          cardTitle.text(forecast.city.name);
+          cardBodyDiv.append(cardTitle);
+          
 
+      }
+  }
 
   $("#submitBtn").on("click", function (event) {
     event.preventDefault();
 
     var userCityInput = $("#inputCity").val();
-    console.log(userCityInput)
+    console.log(userCityInput);
 
-    var newLI = $("<li>")
+    var newLI = $("<li>");
 
-    newLI.text($("#inputCity").val())
-    newLI.addClass("list-group-item disabled")
+    newLI.text($("#inputCity").val());
+    newLI.addClass("list-group-item disabled");
 
-    $(".list-group").append(newLI)
+    $(".list-group").append(newLI);
 
-    getCity(userCityInput)
-    getFiveDay()
-
+    getCity(userCityInput);
+    getFiveDay(userCityInput);
   });
 });

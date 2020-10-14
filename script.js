@@ -38,7 +38,7 @@ $(document).ready(function () {
   function displayFiveDay(forecast){
       for (var i = 0; i < forecast.list.length; i++){
           var newDivRow = $("<div>")
-          newDivRow.addClass("row")
+          newDivRow.addClass("row forecast-rows")
           $("#new-rows").append(newDivRow)
 
           console.log(forecast.length)
@@ -57,8 +57,24 @@ $(document).ready(function () {
           newDiv.append(cardBodyDiv)
 
           var cardTitle = $("<h5>");
-          cardTitle.text(forecast.city.name);
+          cardTitle.addClass("card-title")
+          cardTitle.text(moment(parseInt(forecast.list[i].dt)).format("L"));
           cardBodyDiv.append(cardTitle);
+
+          var forecastTemp = $("<p>")
+          var forecastHumid = $("<p>")
+
+          forecastTemp.addClass("card-text")
+          forecastHumid.addClass("card-text")
+
+          forecastTemp.text("Temp: " + forecast.list[i].main.temp)
+          cardBodyDiv.append(forecastTemp)
+          
+          forecastHumid.text("Humidity: " + forecast.list[i].main.humidity + "%")
+          cardBodyDiv.append(forecastHumid)
+
+
+          
           
 
       }

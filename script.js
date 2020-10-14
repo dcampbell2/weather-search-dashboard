@@ -40,7 +40,7 @@ $(document).ready(function () {
 
   function getUvIndex(uvIndex) {
     var uvQueryURL =
-      "http://api.openweathermap.org/data/2.5/uvi?lat=" + uvIndex.coord.lat + "&lon=" + uvIndex.coord.lon + "&appid=1595add4d1ccc2ce38dfcf973ec248ec";
+      "https://api.openweathermap.org/data/2.5/uvi?lat=" + uvIndex.coord.lat + "&lon=" + uvIndex.coord.lon + "&appid=1595add4d1ccc2ce38dfcf973ec248ec";
 
       $.ajax({
           url: uvQueryURL,

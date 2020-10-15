@@ -16,7 +16,7 @@ $(document).ready(function () {
   }
 
   function displayCityWeather(arrayOfWeather) {
-    $("#cityInfo").text(arrayOfWeather.name);
+    $("#cityInfo").text(arrayOfWeather.name + " " + moment(arrayOfWeather.dt * 1000).format("l"));
     $("#temparature").text("Temparature: " + arrayOfWeather.main.temp);
     $("#humidity").text("Humidity: " + arrayOfWeather.main.humidity);
     $("#wind-speed").text("Wind-Speed: " + arrayOfWeather.wind.speed);
@@ -65,12 +65,12 @@ $(document).ready(function () {
       newDivRow.append(newDiv);
 
       var cardBodyDiv = $("<div>");
-      cardBodyDiv.addClass("card-body");
+      cardBodyDiv.addClass("card-body col-sm");
       newDiv.append(cardBodyDiv);
 
       var cardTitle = $("<h5>");
       cardTitle.addClass("card-title");
-      cardTitle.text(moment(parseInt(forecast.list[i].dt * 1000)).format("L"));
+      cardTitle.text(moment(parseInt(forecast.list[i].dt * 1000.1)).format("L"));
       cardBodyDiv.append(cardTitle);
 
       var forecastTemp = $("<p>");
@@ -98,7 +98,7 @@ $(document).ready(function () {
     var newLI = $("<li>");
 
     newLI.text($("#inputCity").val());
-    newLI.addClass("list-group-item disabled");
+    newLI.addClass("list-group-item");
 
     $(".list-group").append(newLI);
 
